@@ -49,14 +49,14 @@ export function AdminAddMatchForm() {
             placeholder="Time A" 
             value={formData.team_a} 
             onChange={(e) => setFormData({...formData, team_a: e.target.value})}
-            className="bg-black/40 border-white/5 rounded-xl h-11"
+            className="bg-black/60 border-white/5 rounded-2xl h-12 px-5 placeholder:text-gray-600 focus-visible:ring-yellow-500/50"
             required
           />
           <Input 
             placeholder="Time B" 
             value={formData.team_b} 
             onChange={(e) => setFormData({...formData, team_b: e.target.value})}
-            className="bg-black/40 border-white/5 rounded-xl h-11"
+            className="bg-black/60 border-white/5 rounded-2xl h-12 px-5 placeholder:text-gray-600 focus-visible:ring-yellow-500/50"
             required
           />
         </div>
@@ -69,14 +69,14 @@ export function AdminAddMatchForm() {
             placeholder="mx, br, us..." 
             value={formData.team_a_flag} 
             onChange={(e) => setFormData({...formData, team_a_flag: e.target.value})}
-            className="bg-black/40 border-white/5 rounded-xl h-11"
+            className="bg-black/60 border-white/5 rounded-2xl h-12 px-5 placeholder:text-gray-600 focus-visible:ring-yellow-500/50"
             required
           />
           <Input 
             placeholder="fr, ar, de..." 
             value={formData.team_b_flag} 
             onChange={(e) => setFormData({...formData, team_b_flag: e.target.value})}
-            className="bg-black/40 border-white/5 rounded-xl h-11"
+            className="bg-black/60 border-white/5 rounded-2xl h-12 px-5 placeholder:text-gray-600 focus-visible:ring-yellow-500/50"
             required
           />
         </div>
@@ -89,14 +89,14 @@ export function AdminAddMatchForm() {
             type="datetime-local"
             value={formData.date} 
             onChange={(e) => setFormData({...formData, date: e.target.value})}
-            className="bg-black/40 border-white/5 rounded-xl h-11"
+            className="bg-black/60 border-white/5 rounded-2xl h-12 px-5 placeholder:text-gray-600 focus-visible:ring-yellow-500/50 [color-scheme:dark]"
             required
           />
           <Input 
             placeholder="Ex: Grupo A" 
             value={formData.group_name} 
             onChange={(e) => setFormData({...formData, group_name: e.target.value})}
-            className="bg-black/40 border-white/5 rounded-xl h-11"
+            className="bg-black/60 border-white/5 rounded-2xl h-12 px-5 placeholder:text-gray-600 focus-visible:ring-yellow-500/50"
             required
           />
         </div>

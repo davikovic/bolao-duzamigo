@@ -44,32 +44,41 @@ export function AdminMatchRow({ id, teamA, teamB, teamAFlag, teamBFlag, initialS
   };
 
   return (
-    <div className="flex flex-col gap-4 p-5 bg-white dark:bg-gray-900 rounded-2xl border border-gray-100 dark:border-gray-800 shadow-sm">
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-3">
-          <span className="text-2xl">{teamAFlag}</span>
-          <span className="font-bold text-sm text-gray-800 dark:text-gray-200">{teamA}</span>
+    <div className="flex flex-col gap-4 p-6 bg-[#121212] border border-white/5 rounded-3xl shadow-xl hover:border-white/10 transition-all">
+      <div className="grid grid-cols-1 md:grid-cols-[1fr_auto_1fr] items-center gap-6">
+        {/* Team A */}
+        <div className="flex items-center gap-4">
+          <div className="w-12 h-8 rounded-lg overflow-hidden border border-white/10 bg-black/40 flex-shrink-0">
+            <img src={teamAFlag} alt={teamA} className="w-full h-full object-cover" />
+          </div>
+          <span className="font-black text-sm text-white uppercase tracking-tighter truncate">{teamA}</span>
         </div>
-        <div className="flex items-center gap-3">
+
+        {/* Score Inputs */}
+        <div className="flex items-center gap-3 bg-black/40 p-1.5 rounded-2xl border border-white/5">
           <Input 
             type="number" 
             value={scoreA}
             onChange={(e) => setScoreA(e.target.value)}
-            className="w-12 h-10 text-center font-bold"
+            className="w-12 h-10 text-center font-black bg-white/5 border-none focus-visible:ring-yellow-500 rounded-xl"
             placeholder="-"
           />
-          <span className="text-gray-400 font-bold">X</span>
+          <span className="text-yellow-500/50 font-black text-xs">VS</span>
           <Input 
             type="number" 
             value={scoreB}
             onChange={(e) => setScoreB(e.target.value)}
-            className="w-12 h-10 text-center font-bold"
+            className="w-12 h-10 text-center font-black bg-white/5 border-none focus-visible:ring-yellow-500 rounded-xl"
             placeholder="-"
           />
         </div>
-        <div className="flex items-center gap-3">
-          <span className="font-bold text-sm text-gray-800 dark:text-gray-200 text-right">{teamB}</span>
-          <span className="text-2xl">{teamBFlag}</span>
+
+        {/* Team B */}
+        <div className="flex items-center gap-4 justify-end">
+          <span className="font-black text-sm text-white uppercase tracking-tighter truncate text-right">{teamB}</span>
+          <div className="w-12 h-8 rounded-lg overflow-hidden border border-white/10 bg-black/40 flex-shrink-0">
+            <img src={teamBFlag} alt={teamB} className="w-full h-full object-cover" />
+          </div>
         </div>
       </div>
       

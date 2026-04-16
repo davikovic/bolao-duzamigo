@@ -35,9 +35,15 @@ export async function syncFifaData() {
     revalidatePath("/admin");
 
     return { success: true, message: `${matchesToInsert.length} jogos oficiais da Copa 2026 sincronizados com sucesso!` };
-  } catch (error) {
-    console.error("Erro no sync FIFA:", error);
-    return { error: "Falha ao sincronizar dados da FIFA." };
+  } catch (error: any) {
+    console.error("ERRO CRÍTICO NO SYNC FIFA:", {
+      message: error.message,
+      stack: error.stack,
+      code: error.code
+    });
+    return { 
+      error: "Falha na conexão com o banco de dados durante a sincronização. Verifique sua conexão e tente novamente." 
+    };
   }
 }
 
