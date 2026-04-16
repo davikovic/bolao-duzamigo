@@ -37,10 +37,17 @@ const MOCK_GAMES = [
 export default async function Home() {
   let matches: any[] = [];
   let userGuessesMap: Record<number, { a: number; b: number }> = {};
+  let poolName = "";
   let dbError = false;
 
   try {
     const session = await getServerSession(authOptions);
+    const poolId = (session?.user as any)?.poolId;
+
+    if (poolId) {
+      const pool = await db("pools").where({ id: poolId }).first();
+      if (pool) poolName = pool.name;
+    }
 
     const result = await db("matches").select("*").orderBy("date", "asc");
     if (result && result.length > 0) {
@@ -136,6 +143,12 @@ export default async function Home() {
               </div>
               <h2 className="text-2xl font-black text-white uppercase tracking-tight">Próximas Partidas</h2>
            </div>
+           {poolName && (
+              <div className="hidden md:flex items-center gap-2 bg-yellow-500/10 border border-yellow-500/20 px-4 py-1.5 rounded-full shadow-[0_0_15px_rgba(234,179,8,0.05)]">
+                 <div className="w-1.5 h-1.5 bg-yellow-500 rounded-full animate-pulse" />
+                 <span className="text-[10px] font-black text-yellow-500 uppercase tracking-widest">{poolName}</span>
+              </div>
+           )}
            <button className="text-[10px] font-black uppercase tracking-widest text-yellow-500/60 hover:text-yellow-500 transition-colors">Ver Todos</button>
         </div>
 

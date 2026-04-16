@@ -45,29 +45,52 @@ export const authOptions: NextAuthOptions = {
 
       // Upsert para provedores sociais
       const existingUser = await db("users").where({ email: user.email }).first();
+      const isGlobalAdmin = user.email === process.env.ADMIN_EMAIL;
 
       if (!existingUser) {
         await db("users").insert({
           name: user.name,
           email: user.email,
           image: user.image,
+          status: isGlobalAdmin ? 'active' : 'pending'
         });
       } else {
         // Atualiza imagem ou nome se mudou no provedor social
         await db("users").where({ email: user.email }).update({
           name: user.name,
           image: user.image,
+          status: isGlobalAdmin ? 'active' : existingUser.status, // Garante que admin sempre seja ativo
           updated_at: db.fn.now(),
         });
       }
       return true;
     },
-    async session({ session }) {
-      if (session.user?.email) {
-        const user = await db("users").where({ email: session.user.email }).first();
-        if (user) {
-          (session.user as any).id = user.id;
+    async jwt({ token, user, trigger, session }) {
+      if (user) {
+        token.status = (user as any).status;
+      }
+      
+      // Busca status atualizado do banco se necessário
+      const dbUser = await db("users").where({ email: token.email }).first();
+      if (dbUser) {
+        token.status = dbUser.status;
+        token.id = dbUser.id;
+        
+        // Busca o ID do primeiro bolão aprovado
+        const membership = await db("pool_memberships")
+          .where({ user_id: dbUser.id, status: 'approved' })
+          .first();
+        if (membership) {
+          token.poolId = membership.pool_id;
         }
+      }
+      return token;
+    },
+    async session({ session, token }) {
+      if (session.user) {
+        (session.user as any).id = token.id;
+        (session.user as any).status = token.status;
+        (session.user as any).poolId = token.poolId;
       }
       return session;
     }

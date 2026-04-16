@@ -45,6 +45,7 @@ export async function registerUser(formData: FormData) {
       name,
       email,
       password: hashedPassword,
+      status: 'pending'
     });
 
     return { success: true, message: "Usuário cadastrado com sucesso!" };

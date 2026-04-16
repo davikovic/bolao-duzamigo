@@ -13,23 +13,50 @@ interface RankingUser {
 
 export default async function RankingPage() {
   const session = await getServerSession(authOptions);
+  const poolId = (session?.user as any)?.poolId;
   
   let ranking: RankingUser[] = [];
+  let poolName = "Geral";
   let dbError = false;
 
   try {
-    const result = await db("users")
-      .leftJoin("guesses", "users.id", "guesses.user_id")
-      .select("users.id", "users.name", "users.image")
-      .sum("guesses.points_earned as total_points")
-      .groupBy("users.id")
-      .orderBy("total_points", "desc")
-      .orderBy("users.name", "asc");
+    if (poolId) {
+       const pool = await db("pools").where({ id: poolId }).first();
+       if (pool) poolName = pool.name;
 
-    ranking = result.map((row: any) => ({
-      ...row,
-      total_points: Number(row.total_points || 0)
-    }));
+       const result = await db("users")
+        .join("pool_memberships", "users.id", "pool_memberships.user_id")
+        .leftJoin("guesses", "users.id", "guesses.user_id")
+        .where({ 
+          "pool_memberships.pool_id": poolId,
+          "pool_memberships.status": "approved"
+        })
+        .select("users.id", "users.name", "users.image")
+        .sum("guesses.points_earned as total_points")
+        .groupBy("users.id")
+        .orderBy("total_points", "desc")
+        .orderBy("users.name", "asc");
+
+      ranking = result.map((row: any) => ({
+        ...row,
+        total_points: Number(row.total_points || 0)
+      }));
+    } else {
+      // Fallback para admin ou usuários sem pool associado (mostra todos os ativos)
+      const result = await db("users")
+        .leftJoin("guesses", "users.id", "guesses.user_id")
+        .where({ "users.status": "active" })
+        .select("users.id", "users.name", "users.image")
+        .sum("guesses.points_earned as total_points")
+        .groupBy("users.id")
+        .orderBy("total_points", "desc")
+        .orderBy("users.name", "asc");
+
+      ranking = result.map((row: any) => ({
+        ...row,
+        total_points: Number(row.total_points || 0)
+      }));
+    }
   } catch (error) {
     console.error("Erro ao buscar ranking:", error);
     dbError = true;
@@ -67,9 +94,9 @@ export default async function RankingPage() {
            <div className="w-10 h-10 bg-yellow-500/10 rounded-xl flex items-center justify-center border border-yellow-500/20">
               <Trophy className="text-yellow-500" size={20} />
            </div>
-           <h1 className="text-4xl font-black text-white uppercase tracking-tighter">Ranking Geral</h1>
+           <h1 className="text-4xl font-black text-white uppercase tracking-tighter">Ranking {poolName}</h1>
         </div>
-        <p className="text-gray-400 font-medium ml-1">Quem será o grande campeão da rodada?</p>
+        <p className="text-gray-400 font-medium ml-1">Quem será o grande campeão deste grupo?</p>
       </header>
 
       {/* Bento Layout - Top 3 Podium */}
