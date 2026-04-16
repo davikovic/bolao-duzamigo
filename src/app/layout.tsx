@@ -1,8 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import { BottomNav } from "@/components/layout/bottom-nav";
-import { Sidebar } from "@/components/layout/sidebar";
+import { LayoutDynamic } from "@/components/layout/layout-dynamic";
 import { Toaster } from "@/components/ui/sonner";
 
 const geistSans = Geist({
@@ -32,21 +31,9 @@ export default function RootLayout({
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased dark`}
     >
       <body className="min-h-full flex flex-col md:flex-row bg-[#0a0a0a] text-white">
-        {/* Sidebar Desktop */}
-        <Sidebar />
-
-        {/* Main Content Area */}
-        <div className="flex-1 flex flex-col relative min-h-screen">
-          <main className="flex-1 w-full max-w-7xl mx-auto md:px-8 pb-20 md:pb-10">
-            {children}
-          </main>
-          
-          {/* Mobile Navigation */}
-          <div className="md:hidden">
-            <BottomNav />
-          </div>
-        </div>
-        
+        <LayoutDynamic>
+          {children}
+        </LayoutDynamic>
         <Toaster position="top-center" richColors theme="dark" />
       </body>
     </html>
