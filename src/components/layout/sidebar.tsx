@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Home, Trophy, Users, User, LayoutDashboard, Settings, LogOut, Search } from "lucide-react";
+import { Home, Trophy, User, Settings, LogOut, Search, ShieldHalf } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { signOut, useSession } from "next-auth/react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -98,6 +98,23 @@ export function Sidebar() {
           >
             <Settings className={cn("w-5 h-5", pathname.startsWith("/admin") ? "text-black" : "text-yellow-500")} />
             <span className="font-bold text-sm">Painel Admin</span>
+          </Link>
+        )}
+
+        {/* Link Moderador Condicional */}
+        {((session?.user as any)?.moderatedPoolIds as number[] ?? []).length > 0 &&
+          (session?.user as any)?.role !== "admin" && (
+          <Link
+            href="/pools/my-groups"
+            className={cn(
+              "flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 group relative mt-4",
+              pathname.startsWith("/pools/my-groups")
+                ? "bg-purple-500/20 text-purple-300 border border-purple-500/30 shadow-lg"
+                : "text-purple-400/60 hover:text-purple-400 hover:bg-purple-500/5 border border-purple-500/10"
+            )}
+          >
+            <ShieldHalf className="w-5 h-5" />
+            <span className="font-bold text-sm">Gerenciar Grupos</span>
           </Link>
         )}
       </nav>

@@ -90,6 +90,11 @@ export const authOptions: NextAuthOptions = {
             if (membership) {
               token.poolId = membership.pool_id;
             }
+
+            // Bolões onde o usuário é moderador
+            const modMemberships = await db("pool_memberships")
+              .where({ user_id: dbUser.id, role: "moderator", status: "approved" });
+            token.moderatedPoolIds = modMemberships.map((m: any) => m.pool_id);
           }
         } catch (error) {
           console.error("Erro ao atualizar token no JWT callback:", error);
@@ -103,6 +108,7 @@ export const authOptions: NextAuthOptions = {
         (session.user as any).status = token.status;
         (session.user as any).role = token.role;
         (session.user as any).poolId = token.poolId;
+        (session.user as any).moderatedPoolIds = token.moderatedPoolIds ?? [];
       }
       return session;
     }

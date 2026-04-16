@@ -45,10 +45,30 @@ export async function proxy(request: NextRequest) {
       return NextResponse.redirect(new URL("/", request.url));
     }
 
-    // REGRA MULTI-BOLÃO: Se não tem poolId, mandar para explorar (exceto admin e perfil)
-    const isAllowedWithoutPool = pathname === "/pools/explore" || pathname.startsWith("/admin") || pathname === "/profile";
+    // REGRA MULTI-BOLÃO: Se não tem poolId, mandar para explorar (exceto rotas permitidas)
+    const isAllowedWithoutPool =
+      pathname === "/pools/explore" ||
+      pathname.startsWith("/admin") ||
+      pathname === "/profile" ||
+      pathname === "/pools/my-groups" ||
+      // Moderadores podem acessar a página de gerenciamento do seu pool sem ter o poolId ativo no cookie
+      /^\/pools\/\d+\/manage$/.test(pathname);
+
     if (!token.poolId && !isAllowedWithoutPool) {
       return NextResponse.redirect(new URL("/pools/explore", request.url));
+    }
+  }
+
+  // 6. Bloquear /pools/[poolId]/manage para quem não é moderador nem admin
+  const manageMatch = pathname.match(/^\/pools\/(\d+)\/manage$/);
+  if (manageMatch) {
+    const poolId = Number(manageMatch[1]);
+    const isGlobalAdmin = token.role === "admin";
+    const moderatedPoolIds: number[] = (token.moderatedPoolIds as number[]) ?? [];
+    const isModerator = moderatedPoolIds.includes(poolId);
+
+    if (!isGlobalAdmin && !isModerator) {
+      return NextResponse.redirect(new URL("/", request.url));
     }
   }
 
