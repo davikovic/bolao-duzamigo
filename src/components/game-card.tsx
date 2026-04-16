@@ -87,7 +87,9 @@ export function GameCard({
         <div className="flex flex-col items-center flex-1 space-y-3">
           <div className="relative group/flag">
             <div className="absolute -inset-2 bg-yellow-500/20 rounded-full blur-xl opacity-0 group-hover/flag:opacity-100 transition-opacity" />
-            <span className="text-5xl drop-shadow-2xl relative z-10">{teamA.flag}</span>
+            <div className="w-12 h-8 rounded-sm overflow-hidden border border-white/10 bg-black/40 relative z-10 shadow-lg">
+              <img src={teamA.flag} alt={teamA.name} className="w-full h-full object-cover" />
+            </div>
           </div>
           <span className="font-black text-xs text-white uppercase tracking-tighter text-center">
             {teamA.name}
@@ -144,7 +146,9 @@ export function GameCard({
         <div className="flex flex-col items-center flex-1 space-y-3">
           <div className="relative group/flag">
             <div className="absolute -inset-2 bg-yellow-500/20 rounded-full blur-xl opacity-0 group-hover/flag:opacity-100 transition-opacity" />
-            <span className="text-5xl drop-shadow-2xl relative z-10">{teamB.flag}</span>
+            <div className="w-12 h-8 rounded-sm overflow-hidden border border-white/10 bg-black/40 relative z-10 shadow-lg">
+              <img src={teamB.flag} alt={teamB.name} className="w-full h-full object-cover" />
+            </div>
           </div>
           <span className="font-black text-xs text-white uppercase tracking-tighter text-center">
             {teamB.name}
