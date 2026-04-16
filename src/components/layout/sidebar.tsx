@@ -81,6 +81,22 @@ export function Sidebar() {
             </Link>
           );
         })}
+
+        {/* Link Admin Condicional */}
+        {(session?.user as any)?.role === "admin" && (
+          <Link
+            href="/admin"
+            className={cn(
+              "flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 group relative mt-4",
+              pathname.startsWith("/admin")
+                ? "bg-yellow-500 text-black shadow-lg shadow-yellow-500/20"
+                : "text-yellow-500/60 hover:text-yellow-500 hover:bg-yellow-500/5 border border-yellow-500/10"
+            )}
+          >
+            <Settings className={cn("w-5 h-5", pathname.startsWith("/admin") ? "text-black" : "text-yellow-500")} />
+            <span className="font-bold text-sm">Painel Admin</span>
+          </Link>
+        )}
       </nav>
 
       <div className="p-4 mt-auto">

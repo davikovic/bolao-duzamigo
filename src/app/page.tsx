@@ -2,7 +2,7 @@ import { GameCard } from "@/components/game-card";
 import db from "@/lib/db";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
-import { Trophy, Timer, Zap, Flame } from "lucide-react";
+import { Trophy, Timer, Zap, Flame, Info } from "lucide-react";
 
 const MOCK_GAMES = [
   {
@@ -38,6 +38,8 @@ export default async function Home() {
   let matches: any[] = [];
   let userGuessesMap: Record<number, { a: number; b: number }> = {};
   let poolName = "";
+  let poolDescription = "";
+  let poolPrize = "";
   let dbError = false;
 
   try {
@@ -46,7 +48,11 @@ export default async function Home() {
 
     if (poolId) {
       const pool = await db("pools").where({ id: poolId }).first();
-      if (pool) poolName = pool.name;
+      if (pool) {
+        poolName = pool.name;
+        poolDescription = pool.description;
+        poolPrize = pool.prize_info;
+      }
     }
 
     const result = await db("matches").select("*").orderBy("date", "asc");
@@ -132,6 +138,41 @@ export default async function Home() {
               />
            </div>
         </div>
+      </section>
+
+      {/* Info Card - Premiação e Bolão */}
+      <section className="grid grid-cols-1 md:grid-cols-12 gap-6">
+         <div className="md:col-span-8 bg-[#121212] border border-white/5 rounded-[2rem] p-8 relative overflow-hidden group">
+            <div className="absolute top-0 right-0 w-32 h-32 bg-yellow-500/5 blur-3xl -mr-10 -mt-10" />
+            <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
+               <div className="flex flex-col">
+                  <div className="flex items-center gap-3 mb-3">
+                     <div className="w-10 h-10 rounded-xl bg-yellow-500/10 flex items-center justify-center border border-yellow-500/20">
+                        <Trophy className="text-yellow-500" size={20} />
+                     </div>
+                     <span className="text-xs font-black text-white uppercase tracking-widest">🏆 Premiação em Jogo</span>
+                  </div>
+                  <h3 className="text-2xl font-black text-white uppercase tracking-tighter mb-2">{poolName || "Carregando..."}</h3>
+                  <p className="text-gray-400 font-medium text-sm max-w-lg">
+                     {poolPrize || "A premiação deste bolão está sendo definida pela organização. Fique atento!"}
+                  </p>
+               </div>
+               <div className="flex flex-col items-center justify-center p-6 bg-white/5 rounded-2xl border border-white/5 min-w-[120px]">
+                  <span className="text-[10px] font-black text-gray-500 uppercase tracking-widest mb-1">Status</span>
+                  <span className="text-sm font-black text-yellow-500 uppercase tracking-widest">Ativo</span>
+               </div>
+            </div>
+         </div>
+
+         <div className="md:col-span-4 bg-gradient-to-br from-blue-600/20 to-transparent border border-white/5 rounded-[2rem] p-8 flex flex-col justify-center gap-3 relative overflow-hidden group">
+            <div className="flex items-center gap-2 mb-2">
+               <Info className="text-blue-500" size={16} />
+               <span className="text-[10px] font-bold text-blue-500/70 uppercase tracking-widest">Informativo</span>
+            </div>
+            <p className="text-xs font-bold text-gray-300 leading-relaxed">
+               {poolDescription || "Você está participando do bolão oficial do Duzamigo."}
+            </p>
+         </div>
       </section>
 
       {/* Grid de Outros Jogos */}

@@ -1,12 +1,13 @@
 import db from "@/lib/db";
 import { AdminMatchRow } from "@/components/admin-match-row";
-import { Trophy, Globe, PlusCircle, ShieldCheck, UserCheck, Settings2 } from "lucide-react";
+import { Trophy, Globe, PlusCircle, ShieldCheck, UserCheck, Settings2, Hash } from "lucide-react";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import { redirect } from "next/navigation";
 import { AdminFifaSync } from "@/components/admin/fifa-sync-button";
 import { AdminAddMatchForm } from "@/components/admin/add-match-form";
 import { ApproveUsersTab } from "@/components/admin/approve-users-tab";
+import { PoolsTab } from "@/components/admin/pools-tab";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 
@@ -76,9 +77,18 @@ export default async function AdminPage({
             </span>
           )}
         </Link>
+        <Link 
+          href="/admin?tab=pools"
+          className={cn(
+            "flex items-center gap-2 px-6 py-2.5 rounded-xl text-xs font-black uppercase tracking-widest transition-all",
+            activeTab === "pools" ? "bg-yellow-500 text-black shadow-lg shadow-yellow-500/10" : "text-gray-500 hover:text-white"
+          )}
+        >
+          <Hash size={14} /> Bolões
+        </Link>
       </div>
 
-      {activeTab === "matches" ? (
+      {activeTab === "matches" && (
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
           {/* Lado Esquerdo: Lista de Jogos */}
           <div className="lg:col-span-2 space-y-6">
@@ -121,12 +131,18 @@ export default async function AdminPage({
             </div>
           </div>
         </div>
-      ) : (
+      )}
+
+      {activeTab === "users" && (
         <ApproveUsersTab 
           pendingUsers={pendingUsers} 
           activeUsers={activeUsers}
           pools={pools} 
         />
+      )}
+
+      {activeTab === "pools" && (
+        <PoolsTab pools={pools} />
       )}
     </div>
   );
