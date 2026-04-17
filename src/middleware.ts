@@ -3,8 +3,11 @@ import { getToken } from "next-auth/jwt";
 import type { NextRequest } from "next/server";
 
 export async function middleware(request: NextRequest) {
-  const token = await getToken({ req: request });
+  const secret = process.env.NEXTAUTH_SECRET;
+  const token = await getToken({ req: request, secret });
   const { pathname } = request.nextUrl;
+
+  console.log(`[Middleware] Acessando: ${pathname} | Logado: ${!!token}`);
 
   // 1. Permitir acesso a rotas públicas e recursos estáticos
   if (

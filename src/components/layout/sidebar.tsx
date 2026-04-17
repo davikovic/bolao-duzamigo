@@ -120,14 +120,6 @@ export function Sidebar() {
       </nav>
 
       <div className="p-4 mt-auto">
-        <div className="bg-gradient-to-br from-yellow-500/10 to-transparent p-4 rounded-2xl border border-yellow-500/10 mb-6">
-          <p className="text-[10px] uppercase font-bold text-yellow-500/60 tracking-widest mb-1">Próximo Jogo</p>
-          <p className="text-xs font-bold text-white mb-2">Brasil vs Argentina</p>
-          <div className="w-full bg-white/5 h-1.5 rounded-full overflow-hidden">
-             <div className="bg-yellow-500 h-full w-[45%]" />
-          </div>
-        </div>
-
         <button 
            onClick={() => signOut({ callbackUrl: "/login" })}
            className="flex items-center gap-3 px-4 py-3 w-full rounded-xl text-gray-500 hover:text-red-400 hover:bg-red-400/5 transition-all text-sm font-semibold"

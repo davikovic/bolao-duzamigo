@@ -115,16 +115,16 @@ export function AdminFifaSync() {
               {roundsMap && activeTab && roundsMap[activeTab].map((game: any, idx: number) => (
                 <div key={idx} className="flex flex-col md:flex-row md:items-center justify-between bg-[#121212] border border-white/5 p-4 rounded-xl gap-4">
                   <div className="flex flex-col gap-1">
-                    <span className="text-[10px] text-gray-500 font-black uppercase tracking-widest">{game.group_name} • {new Date(game.date).toLocaleDateString()}</span>
+                    <span className="text-[10px] text-gray-500 font-black uppercase tracking-widest">{game.group_name} • {new Date(game.date).toLocaleString("pt-BR", { dateStyle: "short", timeStyle: "short" })}</span>
                     <div className="flex flex-col md:flex-row md:items-center gap-3 text-sm font-bold text-white mt-2">
                       <span className="flex items-center gap-2 w-32 border border-white/10 px-3 py-1.5 rounded-lg bg-black/50 justify-between">
                          <span className="truncate">{game.team_a}</span>
-                         <span>{game.team_a_flag}</span>
+                         <img src={game.team_a_flag} alt={game.team_a} className="w-5 h-3.5 object-cover rounded-sm flex-shrink-0" />
                       </span>
                       <span className="text-gray-500 text-[10px] px-2">VS</span>
                       <span className="flex items-center gap-2 w-32 border border-white/10 px-3 py-1.5 rounded-lg bg-black/50 justify-between">
                          <span className="truncate">{game.team_b}</span>
-                         <span>{game.team_b_flag}</span>
+                         <img src={game.team_b_flag} alt={game.team_b} className="w-5 h-3.5 object-cover rounded-sm flex-shrink-0" />
                       </span>
                     </div>
                     {game.location && <span className="text-xs text-gray-400 mt-2 flex items-center gap-1">📍 {game.location}</span>}
