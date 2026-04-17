@@ -6,6 +6,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { approveUserAction, approveMembershipAction, rejectMembershipAction } from "@/app/actions/admin_approval";
+import { toggleAdminRoleAction } from "@/app/actions/admin_role";
 import { Shield, ShieldAlert, ShieldCheck as ShieldIcon, Check, X } from "lucide-react";
 
 interface PendingUser {
